@@ -13,7 +13,7 @@ function woocommerce_globalpay_init() {
   if (!class_exists('WC_Payment_Gateway')) {
     return;
   }
-  
+
   class WC_GlobalPay extends WC_Payment_Gateway {
     /**
      * Array that will hold payment information.
@@ -28,24 +28,24 @@ function woocommerce_globalpay_init() {
      * @access   private
      */
     private $payment_info = array();
-    
+
     public function __construct() {
       global $woocommerce;
 
       $this->id = 'globalpay';
       $this->icon = apply_filters('woocommerce_globalpay_icon',
-          plugins_url( '/images/globalpay_logo.png', __FILE__ ));
+          plugins_url('/images/globalpay_logo.png', __FILE__ ));
       $this->has_fields = false;
-      $this->liveurl = 'https://demo.globalpay.com.ng/globalpay_demo/paymentgatewaycapture.aspx';
+      $this->liveurl = 'https://www.globalpay.com.ng/Paymentgatewaycapture.aspx';
       $this->testurl = 'https://demo.globalpay.com.ng/globalpay_demo/paymentgatewaycapture.aspx';
-      $this->method_title = __( 'GlobalPay', 'woocommerce' );
-    
+      $this->method_title = __('GlobalPay', 'woocommerce');
+
       // Load the form fields.
       $this->init_form_fields();
-    
+
       // Load the settings.
       $this->init_settings();
-    
+
       // Define user set variables.
       $this->title = $this->settings['title'];
       $this->description = $this->settings['description'];
@@ -58,13 +58,11 @@ function woocommerce_globalpay_init() {
       $this->feedback_message = '';
       $this->webservice_user = $this->settings['webservice_user'];
       $this->webservice_password = $this->settings['webservice_password'];
-      
+
       // Actions.
-      // REMOVE add_action('check-transaction-on-user-return',
-      // REMOVE  array(&$this, 'check_transaction_on_user_return') );
       add_action('woocommerce_receipt_globalpay',
         array(&$this, 'receipt_page'));
-    
+
       add_action('woocommerce_thankyou_' . $this->id,
         array(&$this, 'thankyou_page'));
     
@@ -264,7 +262,6 @@ function woocommerce_globalpay_init() {
     
     function check_transaction_on_user_return() {
       @ob_clean();
-      //header('HTTP/1.1 200 OK');
       global $woocommerce;
       
       if ('yes' == $this->debug) {
@@ -405,18 +402,7 @@ function woocommerce_globalpay_init() {
       
       echo $this->generate_globalpay_form( $order );
     }
-    // REMOVE
-    /*
-    function check_payment_transaction_details() {
-      if (isset($_POST['gtpay_tranx_id'])) {
-        @ob_clean();
 
-        $_POST = stripslashes_deep($_POST);
-        
-        header('HTTP/1.1 200 OK');
-        do_action('check-transaction-on-user-return', $_POST);
-      }
-    }*/
     /**
      * Converts an object into an array.
      *
@@ -489,11 +475,11 @@ function woocommerce_globalpay_init() {
       $soap_action = 'http://www.eazypaynigeria.com/globalpay_demo/getTransactions';
     } else {
       // @todo: get live urls
-      $endpoint = 'https://demo.globalpay.com.ng/GlobalpayWebService_demo/service.asmx?wsdl';
-      $namespace = 'http://www.eazypaynigeria.com/globalpay_demo/';
-      $soap_action = 'http://www.eazypaynigeria.com/globalpay_demo/getTransactions';
+      $endpoint = 'https://www.globalpay.com.ng/globalpaywebservice/service.asmx?wsdl';
+      $namespace = 'https://www.eazypaynigeria.com/globalpay/';
+      $soap_action = 'https://www.eazypaynigeria.com/globalpay/getTransactions';
     }
-    $soap_client = new nusoap_client('https://demo.globalpay.com.ng/GlobalpayWebService_demo/service.asmx?wsdl', true);
+    $soap_client = new nusoap_client($end_point, true);
     if ($soap_client->getError()) {
       $this->payment_info = false;
       return;
@@ -553,6 +539,7 @@ function woocommerce_globalpay_init() {
         'Response dump from GlobalPay' . print_r($this->payment_info, TRUE));
     }
   }
+
   /**
    * Used by Orders interface to update payment information via AJAX.
    *
@@ -801,7 +788,7 @@ function globalpay_requery_callback () {
 // Start a PHP session as WP does not use it.
 add_action('init', 'globalpay_start_session', 1);
 function globalpay_start_session(){
-  if(!session_id()) {
+  if (!session_id()) {
     session_start();
   }
 }
@@ -809,7 +796,7 @@ function globalpay_start_session(){
 // End the PHP session when the user logs in or logs out.
 add_action('wp_logout', 'globalpay_end_session');
 add_action('wp_login', 'globalpay_end_session');
-function globalpay_end_session() {
+function globalpay_end_session(){
   session_destroy ();
 }
 
@@ -830,16 +817,16 @@ function globalpay_add_query_var($vars) {
   return $vars;
 }
 
-// Add Naira to the currency list
+// Add Naira to the currency list.
 add_filter('woocommerce_currencies', 'add_ngn_currency');
 function add_ngn_currency($currencies) {
-  $currencies['NGN'] = __( 'Nigerian Naira', 'woocommerce' );
+  $currencies['NGN'] = __('Nigerian Naira', 'woocommerce');
   return $currencies;
 }
 
 add_filter('woocommerce_currency_symbol', 'add_ngn_currency_symbol', 10, 2);
 function add_ngn_currency_symbol($currency_symbol, $currency) {
-  switch( $currency ) {
+  switch ($currency) {
     case 'NGN':
       $currency_symbol = '&#8358;';
       break;
