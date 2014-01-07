@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Woocommerce GlobalPay
- * Plugin URI:  http://aspire.ng
+ * Plugin URI:  http://store.thesocialbees.com/
  * Description: Allows payments to be made to a Woocommerce shop via GlobalPay
  * Author:      Feyisayo Akinboboye
- * Author URI:  http://aspire.ng
+ * Author URI:  http://store.thesocialbees.com/
  * Version:     1.0
  */
 
