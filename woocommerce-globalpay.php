@@ -52,7 +52,6 @@ function woocommerce_globalpay_init() {
       $this->merchant_id = $this->settings['merchant_id'];
       $this->testmode = $this->settings['testmode'];
       $this->debug = $this->settings['debug'];
-      $this->debug_email = $this->settings['debug_email'];
       $this->thanks_message = $this->settings['thanks_message'];
       $this->error_message = $this->settings['error_message'];
       $this->feedback_message = '';
@@ -160,12 +159,6 @@ function woocommerce_globalpay_init() {
           'type' => 'checkbox',
           'label' => __( 'Enable logging (<code>woocommerce/logs/globalpay.txt</code>)', 'woocommerce' ),
           'default' => 'no'
-        ),
-        'debug_email' => array(
-          'title' => __( 'Debug Email', 'woocommerce' ),
-          'type' => 'text',
-          'label' => __( 'Email address to send transaction response info to. Used for debugging. Blank for no email', 'woocommerce' ),
-          'default' => ''
         )
       );
     
