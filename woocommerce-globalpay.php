@@ -474,12 +474,11 @@ function woocommerce_globalpay_init() {
       $namespace = 'http://www.eazypaynigeria.com/globalpay_demo/';
       $soap_action = 'http://www.eazypaynigeria.com/globalpay_demo/getTransactions';
     } else {
-      // @todo: get live urls
       $endpoint = 'https://www.globalpay.com.ng/globalpaywebservice/service.asmx?wsdl';
       $namespace = 'https://www.eazypaynigeria.com/globalpay/';
       $soap_action = 'https://www.eazypaynigeria.com/globalpay/getTransactions';
     }
-    $soap_client = new nusoap_client($end_point, true);
+    $soap_client = new nusoap_client($endpoint, true);
     if ($soap_client->getError()) {
       $this->payment_info = false;
       return;
