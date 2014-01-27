@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Woocommerce GlobalPay
- * Plugin URI:  http://store.thesocialbees.com/
+ * Plugin URI:  http://wordpress.org/plugins/woocommerce-globalpay
  * Description: Allows payments to be made to a Woocommerce shop via GlobalPay
  * Author:      Feyisayo Akinboboye
- * Author URI:  http://store.thesocialbees.com/
+ * Author URI:  http://twitter.com/Feyisayo
  * Version:     1.0
  */
 
@@ -64,13 +64,13 @@ function woocommerce_globalpay_init() {
 
       add_action('woocommerce_thankyou_' . $this->id,
         array(&$this, 'thankyou_page'));
-    
+
       add_action( 'woocommerce_update_options_payment_gateways_' . $this->id,
         array( $this, 'process_admin_options' ) );
 
       // Logs
       if ($this->debug=='yes') $this->log = $woocommerce->logger();
-    
+
       if ( !$this->is_valid_for_use() ) $this->enabled = false;
     }
 
