@@ -17,7 +17,7 @@ GlobalPay accepts MasterCard, VISA and bank transfers. Get started at https://ww
 
 This plugin was tested up till WooCommerce 2.0.20
 
-This plugin development was sponsored by the The Social Bees http://thesocialbees.com/
+This plugin development was sponsored by the [The Social Bees] (http://thesocialbees.com/)
 
 == Installation ==
 1. Ensure that you have met the following requirements:
@@ -28,9 +28,9 @@ This plugin development was sponsored by the The Social Bees http://thesocialbee
 3. Using an FTP program, or your hosting control panel, upload the unzipped
 plugin folder to your WordPress installation’s wp-content/plugins/ directory.
 4. Activate the plugin from the Plugins menu within the WordPress admin.
-5. Configure your permalink settings: Make sure you are NOT using Wordpress' default permalink setting otherwise user re-direction from GlobalPay's website will NOT work. You can configure your permalink settings on the admin end by going to Settings -> Permalinks and ensure that the option selected is NOT the default.
-6. Configure your merchant credentials: WooCommerce -> Settings -> Payment Gateways -> GlobalPay to configure the merchant credentials (either live or demo) for GlobalPay
-7. Return URL: GlobalPay will require that you specify a URL on your site that your users will be redirected to after attempting to pay on GlobalPay. Use the following URL based on your website: YOURSITE.COM/globalpay-transaction-response
+5. __Configure your permalink settings:__ Make sure you are NOT using Wordpress' default permalink setting otherwise user re-direction from GlobalPay's website will NOT work. You can configure your permalink settings on the admin end by going to Settings -> Permalinks and ensure that the option selected is NOT the default.
+6. __Configure your merchant credentials:__ WooCommerce -> Settings -> Payment Gateways -> GlobalPay to configure the merchant credentials (either live or demo) for GlobalPay
+7. __Return URL:__ GlobalPay will require that you specify a URL on your site that your users will be redirected to after attempting to pay on GlobalPay. Use the following URL based on your website: __YOURSITE.COM/globalpay-transaction-response__
 
 == Frequently Asked Questions ==
 = How do I get a GlobalPay Merchant ID? =
