@@ -17,7 +17,7 @@ GlobalPay accepts MasterCard, VISA and bank transfers. Get started at https://ww
 
 This plugin was tested up till WooCommerce 2.0.20
 
-This plugin development was sponsored by the [The Social Bees] (http://thesocialbees.com/)
+This plugin development was sponsored by the [The Social Bees](http://thesocialbees.com/)
 
 == Installation ==
 1. Ensure that you have met the following requirements:
