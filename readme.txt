@@ -34,15 +34,15 @@ plugin folder to your WordPress installation’s wp-content/plugins/ directory.
 
 == Frequently Asked Questions ==
 = How do I get a GlobalPay Merchant ID? =
-Go to https://www.globalpay.com.ng/ to register. Alternatively, if you have Zenith Bank account contact your branch to started.
+Go to https://www.globalpay.com.ng/ to register. Alternatively, if you have a Zenith Bank account contact your branch to get started.
 
 = How do I add the Naira currency to WooCommerce? =
 When WooCommerce GlobalPay is installed it will automatically add the Naira currency to WooCommerce.
 
 = Something went wrong when a user was redirected back from GlobalPay to my site. How do I know the status of the payment =
-WooCommerce GlobalPay always confirms a payment transaction's status from GlobalPay's servers after a user returns to the merchant site. However, if the user for some reason is not properly redirected you can manually confirm the payment anytime. On the admin end, go to WooCommerce -> Orders. Find the order in question and in the "Actions" section click on the "R" icon it. Give it a few seconds and the order's status icon will change to reflect the payment information received from GlobalPay's servers.
+WooCommerce GlobalPay always confirms a payment transaction's status from GlobalPay's servers after a user returns to the merchant's site. However, if the user for some reason is not properly redirected you can manually confirm the payment anytime. On the admin end, go to WooCommerce -> Orders. Find the order in question and in the "Actions" section click on the "R" icon it. Give it a few seconds and the order's status icon will change to reflect the payment information received from GlobalPay's servers.
 
-NOTE: in WooCommerce, when an order is paid is marked "Processing" 
+NOTE: In WooCommerce, when an order is paid it is marked "Processing" 
 
 == Screenshots ==
 1. GlobalPay listed as a payment method
