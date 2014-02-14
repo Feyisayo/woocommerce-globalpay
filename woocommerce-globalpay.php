@@ -353,7 +353,7 @@ function woocommerce_globalpay_init() {
           . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
           . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
       } else if ('failed' == $order->status) {
-        $this->feedback_message = $this->failed_message
+        $this->feedback_message = $this->error_message
           . '<br/>Below are the details of your payment transaction:'
           . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
           . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
@@ -363,10 +363,7 @@ function woocommerce_globalpay_init() {
           . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
           . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
           . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
-      } else {
-        $this->feedback_message = $this->failed_message . 'Error looking up payment information';
       }
-
       echo wpautop($this->feedback_message);
     }
 
