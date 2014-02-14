@@ -722,8 +722,7 @@ function add_globalpay_requery_button ($actions, $the_order) {
     
   $actions['requery'] = array(
     'url'     => '#',
-    'name'     => __( 'Requery', 'woocommerce-globalpay' ),
-    'image_url' => plugins_url( '/images/requery.png', __FILE__ )
+    'name'     => __( 'Requery', 'woocommerce-globalpay' )
   );
 
   return $actions;
