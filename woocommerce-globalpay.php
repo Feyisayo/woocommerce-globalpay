@@ -316,33 +316,16 @@ function woocommerce_globalpay_init() {
           $this->payment_info['txnref'],
           $order->user_id
         );
-      } else if ('on-hold' == $this->payment_info['status']) {
-        $order->update_status(
-          'on-hold',
-          sprintf (
-            __( 'Payment pending: %s', 'woocommerce' ),
-            $this->payment_info['payment_status_description']
-          )
-        );
-        
-        // Notify admin of discrepancy in amount
-        $this->send_mail_discrepancy_in_payment($order->id, $order->user_id,
-          $order->get_order_total(), $this->payment_info['amount']);
-
-        $this->feedback_message = 'There was a discrepancy between the amount paid and the order amount. A sales person has been notified'
-          . '<br/>Below are the details of your payment transaction:'
-          . '<br/><strong>Transaction reference:</strong> '
-            . "{$this->payment_info['merch_txnref']}"
-          . "<br/><strong>Customer name:</strong> {$this->payment_info['names']}"
-          . '<br/><strong>Amount:</strong> '
-            . number_format($this->payment_info['amount'], 2)
-          . '<br/><strong>GlobalPay reference:</strong> '
-            . "{$this->payment_info['txnref']}"
-          . '<br/><strong>Transaction status description:</strong> '
-            . "{$this->payment_info['payment_status_description']}";
       } else if ('failed' == $this->payment_info['status']) {
         $error_code = $this->payment_info['payment_status_description'];
         
+        if (TRUE == $this->payment_info['amount_discrepancy']) {
+          $error_code = 'Amount discrepancy';
+          $this->payment_info['payment_status_description'] ='Amount discrepancy';
+          // Notify admin of discrepancy in amount
+          $this->send_mail_discrepancy_in_payment($order->id, $order->user_id,
+              $order->get_order_total(), $this->payment_info['amount']);
+        }
         $order->add_order_note(__('Payment Failed - ' . $error_code, 'woocommerce'));
         $order->update_status('failed');
 
@@ -512,12 +495,15 @@ function woocommerce_globalpay_init() {
     }
     
     // Interpret XML string result into an object.
+    $this->payment_info['amount_discrepancy'] = FALSE;
     $xml = simplexml_load_string($result['getTransactionsResult']);
     if ('successful' == $xml->record->payment_status) {
+      $this->payment_info['status'] = 'completed';
+      // If there is an amount discrepancy flag it and mark the transaction
+      // as failed.
       if ($xml->record->amount != $amount) {
-        $this->payment_info['status'] = 'on-hold';
-      } else {
-        $this->payment_info['status'] = 'completed';
+        $this->payment_info['amount_discrepancy'] = TRUE;
+        $this->payment_info['status'] = 'failed';
       }
     } else {
       $this->payment_info['status'] = 'failed';
