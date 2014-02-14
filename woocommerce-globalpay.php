@@ -295,24 +295,9 @@ function woocommerce_globalpay_init() {
             update_post_meta((int)$order_id, $k, $v);
           }
         }
-        
-        update_post_meta( (int) $order_id, 'Payment Method', 'GlobalPay');
-        
-        $this->feedback_message = $this->thanks_message
-          . '<br/>Below are the details of your payment transaction:'
-          . '<br/><strong>Transaction reference:</strong> '
-            . "{$this->payment_info['merch_txnref']}"
-          . "<br/><strong>Customer name:</strong> {$this->payment_info['names']}"
-          . '<br/><strong>Amount paid:</strong> '
-            . number_format($this->payment_info['amount'], 2)
-          . '<br/><strong>Currency:</strong> ' . $this->payment_info['currency']
-          . '<br/><strong>Payment Channel:</strong> '
-            . $this->payment_info['channel']
-          . '<br/><strong>GlobalPay reference:</strong> '
-            . "{$this->payment_info['txnref']}"
-          . '<br/><strong>Transaction status description:</strong> '
-            . "{$this->payment_info['payment_status_description']}";
-        
+
+        update_post_meta((int) $order_id, 'Payment Method', $this->method_title);
+
         $this->send_mail_successful_payment(
           $order->id,
           $order->get_order_total(),
@@ -333,23 +318,7 @@ function woocommerce_globalpay_init() {
         $order->update_status('failed');
 
         $woocommerce->add_error('Transaction Failed: ' . $error_code);
-        
-        $this->feedback_message = $this->failed_message
-          . '<br/>Below are the details of your payment transaction:'
-          . '<br/><strong>Transaction reference:</strong> '
-            . "{$this->payment_info['merch_txnref']}"
-          . "<br/><strong>Customer name:</strong> {$this->payment_info['names']}"
-          . '<br/><strong>Amount:</strong> '
-            . number_format($this->payment_info['amount'], 2)
-          . '<br/><strong>Currency:</strong> ' . $this->payment_info['currency']
-          . '<br/><strong>Payment Channel:</strong> '
-              . $this->payment_info['channel']
-          . '<br/><strong>GlobalPay reference:</strong> '
-            . "{$this->payment_info['txnref']}"
-          . '<br/><strong>Transaction status description:</strong> '
-              . "{$this->payment_info['payment_status_description']}";
       } else if (FALSE == $this->payment_info['status']) {
-        $error = 'Error looking up payment information';
         $order->update_status(
           'on-hold',
           sprintf (
@@ -363,17 +332,46 @@ function woocommerce_globalpay_init() {
         $this->send_mail_payment_info_pending($order->id,
           $order->billing_first_name . ' ' . $order->billing_last_name);
         $woocommerce->add_error('There was an error while looking up the details of your payment information. A sales person has been notified');
-        
-        $this->feedback_message = $this->failed_message . $error;
       }
     }
-    
-    function thankyou_page() {
+
+    function thankyou_page($order_id) {
+      $order = new WC_Order($order_id);
+      // All elements of $order_payment_info are arrays. So when getting the
+      // value get the value at the end of the array which should represent
+      // the most current value
+      $order_payment_info = get_post_meta($order_id);
+      if ('completed' == $order->status || 'processing' == $order->status) {
+        $this->feedback_message = $this->thanks_message
+          . '<br/>Below are the details of your payment transaction:'
+          . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
+          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
+          . '<br/><strong>Amount paid:</strong> '
+            . number_format(end($order_payment_info['amount']), 2)
+          . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
+          . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
+          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
+          . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
+      } else if ('failed' == $order->status) {
+        $this->feedback_message = $this->failed_message
+          . '<br/>Below are the details of your payment transaction:'
+          . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
+          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
+          . '<br/><strong>Amount paid:</strong> '
+            . number_format(end($order_payment_info['amount']), 2)
+          . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
+          . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
+          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
+          . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
+      } else {
+        $this->feedback_message = $this->failed_message . 'Error looking up payment information';
+      }
+
       echo wpautop($this->feedback_message);
     }
 
-    function process_payment( $order_id ) {
-      $order = new WC_Order( $order_id );
+    function process_payment($order_id) {
+      $order = new WC_Order($order_id);
       return array(
         'result' => 'success',
         'redirect' => add_query_arg('order', $order->id, add_query_arg('key', $order->order_key, get_permalink(woocommerce_get_page_id('pay'))))
