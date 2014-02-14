@@ -740,9 +740,9 @@ function add_globalpay_requery_js ($hook) {
   
   $WC_icon_dir = plugins_url() . '/woocommerce/assets/images/icons';
   $admin_url = admin_url();
-  $processing_html_template = '<a class="button tips" href="' . $admin_url . '/admin-ajax.php?action=woocommerce-mark-order-processing&amp;order_id=ORDER_ID"><img src="' . $WC_icon_dir . '/processing.png" alt="Processing" width="14"></a>';
-  $complete_html_template = '<a class="button tips" href="' . $admin_url . '/admin-ajax.php?action=woocommerce-mark-order-complete&amp;order_id=ORDER_ID"><img src="' . $WC_icon_dir . '/complete.png" alt="Complete" width="14"></a>';
-  $view_html_template = '<a class="button tips" href="' . $admin_url . '/post.php?post=ORDER_ID&amp;action=edit"><img src="' . $WC_icon_dir . '/view.png" alt="View" width="14"></a>';
+  $processing_html_template = '<a class="button tips processing" href="' . $admin_url . '/admin-ajax.php?action=woocommerce-mark-order-processing&amp;order_id=ORDER_ID">Processing</a>';
+  $complete_html_template = '<a class="button tips complete" href="' . $admin_url . '/admin-ajax.php?action=woocommerce-mark-order-complete&amp;order_id=ORDER_ID">Complete</a>';
+  $view_html_template = '<a class="button tips view" href="' . $admin_url . '/post.php?post=ORDER_ID&amp;action=edit">View</a>';
   
   wp_localize_script(
     'ajax-script', 'ajax_object',

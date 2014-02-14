@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
                 ajax_object.complete_html_template.replace ( 
                   'ORDER_ID', event.data.the_order_id
                 )
-              )              
+              )
               break;
             
             case 'on-hold':
