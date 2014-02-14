@@ -305,6 +305,9 @@ function woocommerce_globalpay_init() {
           . "<br/><strong>Customer name:</strong> {$this->payment_info['names']}"
           . '<br/><strong>Amount paid:</strong> '
             . number_format($this->payment_info['amount'], 2)
+          . '<br/><strong>Currency:</strong> ' . $this->payment_info['currency']
+          . '<br/><strong>Payment Channel:</strong> '
+            . $this->payment_info['channel']
           . '<br/><strong>GlobalPay reference:</strong> '
             . "{$this->payment_info['txnref']}"
           . '<br/><strong>Transaction status description:</strong> '
@@ -338,6 +341,9 @@ function woocommerce_globalpay_init() {
           . "<br/><strong>Customer name:</strong> {$this->payment_info['names']}"
           . '<br/><strong>Amount:</strong> '
             . number_format($this->payment_info['amount'], 2)
+          . '<br/><strong>Currency:</strong> ' . $this->payment_info['currency']
+          . '<br/><strong>Payment Channel:</strong> '
+              . $this->payment_info['channel']
           . '<br/><strong>GlobalPay reference:</strong> '
             . "{$this->payment_info['txnref']}"
           . '<br/><strong>Transaction status description:</strong> '
