@@ -281,6 +281,11 @@ function woocommerce_globalpay_init() {
       $_GET['order'] = $order->id;
 
       $this->get_transaction_status($merch_txnref, $order->get_order_total());
+      foreach ($this->payment_info as $k => $v) {
+        if ('status' != $k){
+          update_post_meta((int)$order_id, $k, $v);
+        }
+      }
 
       if ('completed' == $this->payment_info['status']) {
         // Payment completed
@@ -289,12 +294,6 @@ function woocommerce_globalpay_init() {
         $woocommerce->cart->empty_cart();
         
         if ($this->debug=='yes') $this->log->add('globalpay', 'Payment complete.' );
-        
-        foreach ($this->payment_info as $k => $v) {
-          if ('status' != $k){
-            update_post_meta((int)$order_id, $k, $v);
-          }
-        }
 
         update_post_meta((int) $order_id, 'Payment Method', $this->method_title);
 
