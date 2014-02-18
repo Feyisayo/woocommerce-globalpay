@@ -210,7 +210,7 @@ function woocommerce_globalpay_init() {
       
       $woocommerce->add_inline_js('
         jQuery("body").block({
-          message: "<img src=\"'.esc_url( $woocommerce->plugin_url() ).'/assets/images/ajax-loader.gif\" alt=\"Redirecting...\" style=\"float:left; margin-right: 10px;\" />'.__('Thank you for your order. We are now redirecting you to GlobalPay to make payment.', 'woocommerce').'",
+          message: "' . __('Thank you for your order. We are now redirecting you to GlobalPay to make payment.', 'woocommerce') .'",
           overlayCSS: {
             background: "#fff",
             opacity: 0.6
@@ -359,7 +359,7 @@ function woocommerce_globalpay_init() {
           . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
           . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
           . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
-      } else if ('on-hold' == $order->status) {
+      } else if ('on-hold' == $order->status && TRUE == $order_payment_info['amount_discrepancy']) {
         $this->feedback_message = 'Your payment was successful. '
           . 'However there was a discrepancy in the amount paid.'
           . '<br/>The order amount is <strong>NGN' . number_format($order->get_order_total(), 2) . '</strong>'
@@ -508,10 +508,12 @@ function woocommerce_globalpay_init() {
     }
     
     // Interpret XML string result into an object.
+    $this->payment_info['amount_discrepancy'] = FALSE;
     $xml = simplexml_load_string($result['getTransactionsResult']);
     if ('successful' == $xml->record->payment_status) {
       // If there is an amount discrepancy flag it
       if ($xml->record->amount != $amount) {
+        $this->payment_info['amount_discrepancy'] = TRUE;
         $this->payment_info['status'] = 'on-hold';
       } else {
         $this->payment_info['status'] = 'completed';
