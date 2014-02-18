@@ -300,18 +300,20 @@ function woocommerce_globalpay_init() {
         );
       } else if ('failed' == $this->payment_info['status']) {
         $error_code = $this->payment_info['payment_status_description'];
-        
-        if (TRUE == $this->payment_info['amount_discrepancy']) {
-          $error_code = 'Amount discrepancy';
-          $this->payment_info['payment_status_description'] ='Amount discrepancy';
-          // Notify admin of discrepancy in amount
-          $this->send_mail_discrepancy_in_payment($order->id, $order->user_id,
-              $order->get_order_total(), $this->payment_info['amount']);
-        }
         $order->add_order_note(__('Payment Failed - ' . $error_code, 'woocommerce'));
         $order->update_status('failed');
 
         $woocommerce->add_error('Transaction Failed: ' . $error_code);
+      } else if ('on-hold' == $this->payment_info['status']) {
+        $order->update_status('on-hold', sprintf(
+            __( 'Payment pending: %s', 'woocommerce' ),
+            'Amount discrepancy'
+        ));
+        $error_code = 'Amount discrepancy';
+        // Notify admin of discrepancy in amount
+        $this->send_mail_discrepancy_in_payment($order->id, $order->user_id,
+            $order->get_order_total(), $this->payment_info['amount']);
+        $woocommerce->add_error('Order on hold: ' . $error_code);
       } else if (FALSE == $this->payment_info['status']) {
         $order->update_status(
           'on-hold',
@@ -357,7 +359,23 @@ function woocommerce_globalpay_init() {
           . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
           . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
           . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
+      } else if ('on-hold' == $order->status) {
+        $this->feedback_message = 'Your payment was successful. '
+          . 'However there was a discrepancy in the amount paid.'
+          . '<br/>The order amount is <strong>NGN' . number_format($order->get_order_total(), 2) . '</strong>'
+          . '<br/>while the actual amount paid is <strong>NGN' . number_format(end($order_payment_info['amount']), 2) . '</strong>'
+          . '<br/> A sales person has already been notified of this.<br/>'
+          . '<br/>Below are the details of your payment transaction:'
+          . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
+          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
+          . '<br/><strong>Amount paid:</strong> '
+            . number_format(end($order_payment_info['amount']), 2)
+          . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
+          . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
+          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
+          . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
       }
+
       echo wpautop($this->feedback_message);
     }
 
@@ -490,15 +508,13 @@ function woocommerce_globalpay_init() {
     }
     
     // Interpret XML string result into an object.
-    $this->payment_info['amount_discrepancy'] = FALSE;
     $xml = simplexml_load_string($result['getTransactionsResult']);
     if ('successful' == $xml->record->payment_status) {
-      $this->payment_info['status'] = 'completed';
-      // If there is an amount discrepancy flag it and mark the transaction
-      // as failed.
+      // If there is an amount discrepancy flag it
       if ($xml->record->amount != $amount) {
-        $this->payment_info['amount_discrepancy'] = TRUE;
-        $this->payment_info['status'] = 'failed';
+        $this->payment_info['status'] = 'on-hold';
+      } else {
+        $this->payment_info['status'] = 'completed';
       }
     } else {
       $this->payment_info['status'] = 'failed';
