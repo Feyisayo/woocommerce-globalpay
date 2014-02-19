@@ -4,7 +4,7 @@ Donate Link: http://profiles.wordpress.org/feyisayo/
 Tags: globalpay, payment gateway, zenith bank, ecommerce, e-commerce, commerce, wordpress ecommerce
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 1.0
+Stable tag: 2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,6 +19,7 @@ This plugin was tested up till WooCommerce 2.1.2
 
 This plugin development was sponsored by the [The Social Bees](http://thesocialbees.com/)
 
+Follow this code development on [Github](https://github.com/Feyisayo/woocommerce-globalpay)
 == Installation ==
 1. Ensure that you have met the following requirements:
  * WordPress 3.5 or greater
