@@ -13,7 +13,7 @@ Woocommerce GlobalPay allows payments to be made to a Woocommerce shop via Globa
 == Description ==
 GlobalPay is a web-based payment gateway that enables merchants with functional websites to accept card payments from customers worldwide.
 
-GlobalPay accepts MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
+With GlobalPay, you website can accept payment via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
 
 This plugin was tested up till WooCommerce 2.1.2
 
@@ -26,9 +26,11 @@ This plugin development was sponsored by the [The Social Bees](http://thesocialb
 3. Using an FTP program, or your hosting control panel, upload the unzipped
 plugin folder to your WordPress installation’s wp-content/plugins/ directory.
 4. Activate the plugin from the Plugins menu within the WordPress admin.
-5. __Configure your permalink settings:__ Make sure you are NOT using Wordpress' default permalink setting otherwise user re-direction from GlobalPay's website will NOT work. You can configure your permalink settings on the admin end by going to Settings -> Permalinks and ensure that the option selected is NOT the default.
+5. __Configure your permalink settings:__ Make sure you are __NOT__ using Wordpress' default permalink setting otherwise user re-direction from GlobalPay's website will __NOT work__. You can configure your permalink settings on the admin end by going to Settings -> Permalinks and ensure that the option selected is NOT the default.
 6. __Configure your merchant credentials:__ WooCommerce -> Settings -> Payment Gateways -> GlobalPay to configure the merchant credentials (either live or demo) for GlobalPay
 7. __Return URL:__ GlobalPay will require that you specify a URL on your site that your users will be redirected to after attempting to pay on GlobalPay. Use the following URL based on your website: __YOURSITE.COM/globalpay-transaction-response__
+8. __Template Override:__ In the case of a __failed__ payment attempt, when the user is redirected to your site from GlobalPay Woocommerce displays the text 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction.'
+This text can be misleading. To remove it, an override has been included with WooCommerce GlobalPay. Go to woocommerce-globalpay/resources, copy the woocommerce folder and paste it in the folder of your current theme.
 
 == Frequently Asked Questions ==
 = How do I get a GlobalPay Merchant ID? =
@@ -47,10 +49,19 @@ NOTE: In WooCommerce, when an order is paid it is marked "Processing"
 2. Updating an order status on the admin
 
 == Changelog ==
+= 2.1 =
+* Added support for Woocommerce 2.1.2 and Wordpress 3.8.1
+* Currency and payment channel displayed to user on Thank You page
+* Included Woocommerce template override for Thank You page
+* MasterCard and Visa logos added to GlobalPay logo
+* Bug fixes
 
 = 1.0 =
 Initial release
 
 == Upgrade Notice ==
+= 2.1 =
+Compatible with Wordpress 3.8.1 and WooCommerce 2.1.2. Template override for Thank You page now included.
+
 = 1.0 =
 Initial release
