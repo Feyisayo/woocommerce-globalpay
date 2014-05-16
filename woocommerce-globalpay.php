@@ -171,17 +171,32 @@ function woocommerce_globalpay_init() {
 
       $order_total = $order->get_order_total();
 
-      if ($this->debug=='yes') {
+      if ($this->debug == 'yes') {
         $this->log->add( 'globalpay', 'Generating payment form for order #' . $order->id . '.');
       }
 
+      $name = '';
+      $user_info = get_userdata($order->user_id);
+      if (!empty($user_info)) {
+      	if ($user_info->first_name || $user_info->last_name) {
+      		$name = esc_html(ucfirst($user_info->first_name ) . ' ' . ucfirst($user_info->last_name));
+      	} else {
+      		$name = esc_html(ucfirst($user_info->display_name));
+      	}
+      } else {
+      	if ($the_order->billing_first_name || $the_order->billing_last_name) {
+      		$name = trim( $the_order->billing_first_name . ' ' . $the_order->billing_last_name );
+      	} else {
+      		$name = __( 'Guest', 'woocommerce' );
+      	}
+      }
+            
       $globalpay_args = array(
         'merchantid' => $this->merchant_id,
         'amount' => $order_total,
         'currency' => get_woocommerce_currency(),
         'merch_txnref' => $txn_ref,
-        'names' => trim($order->billing_first_name .
-            ' ' . $order->billing_last_name),
+        'name' => $name,
         'email_address' => $order->billing_email,
         'phone_number' => $order->billing_phone
       );
@@ -192,11 +207,11 @@ function woocommerce_globalpay_init() {
       return $globalpay_args;
     }
     
-    function generate_globalpay_form( $order_id ) {
+    function generate_globalpay_form($order_id) {
       global $woocommerce;
       
-      $order = new WC_Order( $order_id );
-      $globalpay_args = $this->get_globalpay_args( $order );
+      $order = new WC_Order($order_id);
+      $globalpay_args = $this->get_globalpay_args($order);
       $globalpay_args_array = array();
       
       $globalpay_adr = $this->liveurl;
@@ -341,7 +356,7 @@ function woocommerce_globalpay_init() {
         $this->feedback_message = $this->thanks_message
           . '<br/>Below are the details of your payment transaction:'
           . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
-          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
+          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['name'])
           . '<br/><strong>Amount paid:</strong> '
             . number_format(end($order_payment_info['amount']), 2)
           . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
@@ -352,7 +367,7 @@ function woocommerce_globalpay_init() {
         $this->feedback_message = $this->error_message
           . '<br/>Below are the details of your payment transaction:'
           . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
-          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
+          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['name'])
           . '<br/><strong>Amount paid:</strong> '
             . number_format(end($order_payment_info['amount']), 2)
           . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
@@ -367,7 +382,7 @@ function woocommerce_globalpay_init() {
           . '<br/> A sales person has already been notified of this.<br/>'
           . '<br/>Below are the details of your payment transaction:'
           . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
-          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['names'])
+          . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['name'])
           . '<br/><strong>Amount paid:</strong> '
             . number_format(end($order_payment_info['amount']), 2)
           . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
@@ -731,7 +746,7 @@ function add_globalpay_requery_button ($actions, $the_order) {
     
   $actions['requery'] = array(
     'url'     => '#',
-    'name'     => __( 'Requery', 'woocommerce-globalpay' )
+    'name'     => __( 'R', 'woocommerce-globalpay' )
   );
 
   return $actions;
