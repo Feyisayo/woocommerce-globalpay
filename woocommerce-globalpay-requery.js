@@ -1,14 +1,11 @@
 jQuery(document).ready(function($) {
   jQuery('a.tips[href=#]').each (function (i, e) {
     order_id = jQuery(e).parent().parent().parent().attr('id').split('-')[1];
-    
-    jQuery(e).bind (
-      'click',
-      {the_order_id: order_id},
-      function (event) {
+
+    jQuery(e).bind ('click', {the_order_id: order_id}, function (event) {
         event.data.action = 'requery';
         // event.data.the_order_id is already order_id
-        jQuery.post(ajax_object.ajax_url, event.data, function(response) {
+        jQuery.post(globalpay_ajax_object.ajax_url, event.data, function(response) {
           parent_row = jQuery(e).parent().parent().parent();
           
           if ('' != response) {

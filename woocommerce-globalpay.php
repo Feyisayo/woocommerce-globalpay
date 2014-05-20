@@ -706,7 +706,7 @@ HTML;
   function add_globalpay_gateway( $methods ) {
     $methods[] = 'WC_GlobalPay'; return $methods;
   }
-  
+
   add_filter('woocommerce_payment_gateways', 'add_globalpay_gateway' );
 }
 
@@ -715,7 +715,9 @@ HTML;
 add_action('template_redirect', 'globalpay_check_response');
 function globalpay_check_response() {
   global $wp_query;
-  if (isset($wp_query->query['globalpay-transaction-response']) && isset($_SESSION['globalpay_redirect_url'])) {
+  if (isset($wp_query->query['globalpay-transaction-response'])
+    && isset($_SESSION['globalpay_redirect_url'])) {
+
     $r = $_SESSION['globalpay_redirect_url'];
     unset($_SESSION['globalpay_redirect_url']);
     wp_redirect($r);
@@ -729,24 +731,29 @@ add_action('init', 'globalpay_check_transaction_on_user_return');
 function globalpay_check_transaction_on_user_return (){
   // Ensure that $_SESSION['globalpay_redirect_url'] is NOT set as this shows
   // that the function globalpay_check_response() has been previously called
-  if (isset($_SESSION['globalpay_order_id']) && !isset($_SESSION['globalpay_redirect_url'])) {
+  if (isset($_SESSION['globalpay_order_id'])
+    && !isset($_SESSION['globalpay_redirect_url'])) {
+
     $wc_globalpay = new WC_GlobalPay();
     $wc_globalpay->check_transaction_on_user_return();
   }
 }
 
 add_filter('woocommerce_admin_order_actions',
-  'add_globalpay_requery_button', 10, 2);
+            'add_globalpay_requery_button', 10, 2);
 function add_globalpay_requery_button ($actions, $the_order) {
-  // Do this only for GlobalPay-based payments.
+  // Do this only for GlobalPay-based payments that are not successful
   $wc_globalpay = new WC_GlobalPay();
-  if ($the_order->payment_method != $wc_globalpay->id) {
+  if ($the_order->payment_method != $wc_globalpay->id
+      || $the_order->status == 'processing'
+      || $the_order->status == 'completed') {
     return $actions;
   }
-    
+
   $actions['requery'] = array(
     'url'     => '#',
-    'name'     => __( 'R', 'woocommerce-globalpay' )
+    'name'     => __( 'Requery', 'woocommerce-globalpay' ),
+    'action' => 'icon-wooglobalpay-webfont'
   );
 
   return $actions;
@@ -757,7 +764,7 @@ function add_globalpay_requery_js ($hook) {
   if( 'edit.php' != $hook ) return;
         
   wp_enqueue_script(
-    'ajax-script',
+    'globalpay-ajax-script',
     plugins_url( 'woocommerce-globalpay-requery.js', __FILE__ ),
     array('jquery')
   );
@@ -769,8 +776,7 @@ function add_globalpay_requery_js ($hook) {
   $view_html_template = '<a class="button tips view" href="' . $admin_url . '/post.php?post=ORDER_ID&amp;action=edit">View</a>';
   
   wp_localize_script(
-    'ajax-script', 'ajax_object',
-    array(
+    'globalpay-ajax-script', 'globalpay_ajax_object', array(
       'ajax_url' => admin_url( 'admin-ajax.php' ),
       'processing_html_template' => $processing_html_template,
       'complete_html_template' => $complete_html_template,
@@ -788,6 +794,12 @@ function globalpay_requery_callback () {
   }
   echo $status;
   die();
+}
+
+add_action('woocommerce_admin_css', 'globalpay_add_custom_css');
+function globalpay_add_custom_css() {
+  wp_register_style('globalpay-css', plugins_url( '/css/styles.css', __FILE__ ));
+  wp_enqueue_style('globalpay-css');
 }
 
 // Start a PHP session as WP does not use it.
