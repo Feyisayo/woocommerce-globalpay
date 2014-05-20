@@ -34,7 +34,7 @@ function woocommerce_globalpay_init() {
 
       $this->id = 'globalpay';
       $this->icon = apply_filters('woocommerce_globalpay_icon',
-          plugins_url('/images/globalpay_logo.png', __FILE__ ));
+          plugins_url('/images/globalpay_logo.png', __FILE__));
       $this->has_fields = false;
       $this->liveurl = 'https://www.globalpay.com.ng/Paymentgatewaycapture.aspx';
       $this->testurl = 'https://demo.globalpay.com.ng/globalpay_demo/paymentgatewaycapture.aspx';
@@ -75,7 +75,7 @@ function woocommerce_globalpay_init() {
     }
 
     function is_valid_for_use() {
-      
+
       if (!in_array(get_option('woocommerce_currency'), array('NGN'))) {
         return false;
       } else {
@@ -739,8 +739,8 @@ function globalpay_check_transaction_on_user_return (){
   }
 }
 
-add_filter('woocommerce_admin_order_actions',
-            'add_globalpay_requery_button', 10, 2);
+add_filter('woocommerce_admin_order_actions', 'add_globalpay_requery_button',
+  10, 2);
 function add_globalpay_requery_button ($actions, $the_order) {
   // Do this only for GlobalPay-based payments that are not successful
   $wc_globalpay = new WC_GlobalPay();
@@ -752,7 +752,7 @@ function add_globalpay_requery_button ($actions, $the_order) {
 
   $actions['requery'] = array(
     'url'     => '#',
-    'name'     => __( 'Requery', 'woocommerce-globalpay' ),
+    'name'     => __($the_order->id, 'woocommerce-globalpay'),
     'action' => 'icon-wooglobalpay-webfont'
   );
 
