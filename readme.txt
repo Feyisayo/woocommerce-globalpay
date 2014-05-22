@@ -11,9 +11,9 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Woocommerce GlobalPay allows payments to be made to a Woocommerce shop via GlobalPay.
 
 == Description ==
-GlobalPay is a web-based payment gateway that enables merchants with functional websites to accept card payments from customers worldwide.
+GlobalPay is a web-based payment gateway that enables merchants/sellers to accept card payments from customers worldwide.
 
-With GlobalPay, you website can accept payment via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
+With GlobalPay, your website can accept payments via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
 
 This plugin was tested with WooCommerce 2.1.9
 
@@ -48,8 +48,14 @@ NOTE: In WooCommerce, when an order is paid it is marked "Processing"
 == Screenshots ==
 1. GlobalPay listed as a payment method
 2. The requery button
+3. An order being updated using the requery button
 
 == Changelog ==
+= 3.0 =
+* Compatible with WordPress 3.9.1 and WooCommerce 2.1.9
+* Requery button changed to an icon font from [Fontastic](fontastic.me)
+* Fixed issue due to API change by GlobalPay 
+
 = 2.1 =
 * Added support for Woocommerce 2.1.2 and Wordpress 3.8.1
 * Currency and payment channel displayed to user on Thank You page
