@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
   jQuery('a.icon-wooglobalpay-webfont').each (function (i, e) {
-    order_id = $(e).text();
+    order_id = $(e).text().replace('Update order ', '');
 
     jQuery(e).bind ('click', {the_order_id: order_id}, function (event) {
         jQuery.blockUI({ message: '<h3>Updating from GlobalPay. Please wait.....</h3>'});
@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
           if ('' == response) {
             r_message = '<h3>An unexpected error has occured. Please try again later</h3>';
           } else {
-            r_message = '<h3>The order status is ' + response + '</h3>';
+            r_message = '<h3>The order status is ' + response + '<br/>The page will reload shortly</h3>';
           }
           jQuery.blockUI({ message: r_message});
           setTimeout(jQuery.unblockUI, 2000);
@@ -23,6 +23,6 @@ jQuery(document).ready(function($) {
         });
       }
     );
-    
-  })
+
+  });
 });

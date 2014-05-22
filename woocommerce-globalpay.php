@@ -5,7 +5,7 @@
  * Description: Allows payments to be made to a Woocommerce shop via GlobalPay
  * Author:      Feyisayo Akinboboye
  * Author URI:  http://twitter.com/Feyisayo
- * Version:     2.1
+ * Version:     3.0
  */
 
 function woocommerce_globalpay_init() {
@@ -178,17 +178,17 @@ function woocommerce_globalpay_init() {
       $name = '';
       $user_info = get_userdata($order->user_id);
       if (!empty($user_info)) {
-      	if ($user_info->first_name || $user_info->last_name) {
-      		$name = esc_html(ucfirst($user_info->first_name ) . ' ' . ucfirst($user_info->last_name));
-      	} else {
-      		$name = esc_html(ucfirst($user_info->display_name));
-      	}
+        if ($user_info->first_name || $user_info->last_name) {
+          $name = esc_html(ucfirst($user_info->first_name ) . ' ' . ucfirst($user_info->last_name));
+        } else {
+          $name = esc_html(ucfirst($user_info->display_name));
+        }
       } else {
-      	if ($the_order->billing_first_name || $the_order->billing_last_name) {
-      		$name = trim( $the_order->billing_first_name . ' ' . $the_order->billing_last_name );
-      	} else {
-      		$name = __( 'Guest', 'woocommerce' );
-      	}
+        if ($the_order->billing_first_name || $the_order->billing_last_name) {
+        $name = trim( $the_order->billing_first_name . ' ' . $the_order->billing_last_name );
+        } else {
+          $name = __( 'Guest', 'woocommerce' );
+        }
       }
             
       $globalpay_args = array(
@@ -752,7 +752,7 @@ function add_globalpay_requery_button ($actions, $the_order) {
 
   $actions['requery'] = array(
     'url'     => '#',
-    'name'     => __($the_order->id, 'woocommerce-globalpay'),
+    'name'     => __('Update order ' . $the_order->id, 'woocommerce-globalpay'),
     'action' => 'icon-wooglobalpay-webfont'
   );
 

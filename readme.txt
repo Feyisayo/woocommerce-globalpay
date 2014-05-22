@@ -1,10 +1,10 @@
 === Woocommerce GlobalPay ===
 Contributors: Feyisayo
 Donate Link: http://profiles.wordpress.org/feyisayo/
-Tags: globalpay, payment gateway, zenith bank, ecommerce, e-commerce, commerce, wordpress ecommerce
+Tags: globalpay, payment gateway, zenith bank, ecommerce, e-commerce, commerce, wordpress ecommerce, woocommerce
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 2.1
+Tested up to: 3.9.1
+Stable tag: 3.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,7 +15,7 @@ GlobalPay is a web-based payment gateway that enables merchants with functional 
 
 With GlobalPay, you website can accept payment via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
 
-This plugin was tested up till WooCommerce 2.1.2
+This plugin was tested with WooCommerce 2.1.9
 
 This plugin development was sponsored by the [The Social Bees](http://thesocialbees.com/)
 
@@ -41,13 +41,13 @@ Go to https://www.globalpay.com.ng/ to register. Alternatively, if you have a Ze
 When WooCommerce GlobalPay is installed it will automatically add the Naira currency to WooCommerce.
 
 = Something went wrong when a user was redirected back from GlobalPay to my site. How do I know the status of the payment? =
-WooCommerce GlobalPay always confirms a payment transaction's status from GlobalPay's servers after a user returns to the merchant's site. However, if the user for some reason is not properly redirected you can manually confirm the payment anytime. On the admin end, go to WooCommerce -> Orders. Find the order in question and in the "Actions" section click on the "Requery" button. Give it a few seconds and the order's status icon will change to reflect the payment information received from GlobalPay's servers.
+WooCommerce GlobalPay always confirms a payment transaction's status from GlobalPay's servers after a user returns to the merchant's site. However, if the user for some reason is not properly redirected you can manually confirm the payment anytime. On the admin end, go to WooCommerce -> Orders. Find the order in question and in the "Actions" section click on the requery button (see the second image on the [screenshots page] (http://wordpress.org/plugins/woocommerce-globalpay/screenshots/)). Give it a few seconds and the order's status icon will change to reflect the payment information received from GlobalPay's servers.
 
 NOTE: In WooCommerce, when an order is paid it is marked "Processing" 
 
 == Screenshots ==
 1. GlobalPay listed as a payment method
-2. Updating an order status on the admin
+2. The requery button
 
 == Changelog ==
 = 2.1 =
