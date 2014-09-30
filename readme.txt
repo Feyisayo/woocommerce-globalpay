@@ -4,7 +4,7 @@ Donate Link: http://profiles.wordpress.org/feyisayo/
 Tags: globalpay, payment gateway, zenith bank, ecommerce, e-commerce, commerce, wordpress ecommerce, woocommerce
 Requires at least: 3.5
 Tested up to: 3.9.1
-Stable tag: 3.0
+Stable tag: 3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -51,9 +51,9 @@ NOTE: In WooCommerce, when an order is paid it is marked "Processing"
 3. An order being updated using the requery button
 
 == Changelog ==
-= 3.0 =
+= 3.1 =
 * Compatible with WordPress 3.9.1 and WooCommerce 2.1.9
-* Requery button changed to an icon font from [Fontastic](fontastic.me)
+* Requery button changed to an icon font from [Fontastic](http://fontastic.me)
 * Fixed issue due to API change by GlobalPay 
 
 = 2.1 =
