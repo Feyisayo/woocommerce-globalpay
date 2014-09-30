@@ -69,7 +69,7 @@ function woocommerce_globalpay_init() {
         array( $this, 'process_admin_options' ) );
 
       // Logs
-      if ($this->debug=='yes') $this->log = $woocommerce->logger();
+      if ($this->debug=='yes') $this->log = new WC_Logger();
 
       if ( !$this->is_valid_for_use() ) $this->enabled = false;
     }
@@ -197,6 +197,7 @@ function woocommerce_globalpay_init() {
         'currency' => get_woocommerce_currency(),
         'merch_txnref' => $txn_ref,
         'name' => $name,
+        'names' => $name,
         'email_address' => $order->billing_email,
         'phone_number' => $order->billing_phone
       );
@@ -539,7 +540,14 @@ function woocommerce_globalpay_init() {
     // Add all $xml's properties to $this->payment_info
     $xml_arr = $this->make_array($xml);
     array_walk_recursive($xml_arr, array($this, 'fill_out_payment_info'));
-
+    
+    // Work-around for name/names API field issue
+    if (isset($this->payment_info['name'])) {
+      $this->payment_info['names'] = $this->payment_info['name'];
+    } else {
+      $this->payment_info['name'] = $this->payment_info['names'];
+    }
+    
     if ('yes' == $this->debug) {
       $this->log->add('globalpay',
         'Response dump from GlobalPay' . print_r($this->payment_info, TRUE));
@@ -785,7 +793,7 @@ function add_globalpay_requery_js ($hook) {
   );
 }
 
-add_action('wp_ajax_requery', 'globalpay_requery_callback');
+add_action('wp_ajax_globalpay_requery', 'globalpay_requery_callback');
 function globalpay_requery_callback () {
   $wc_globalpay = new WC_GlobalPay();
   $status = $wc_globalpay->ajax_update_payment_info($_POST['the_order_id']);

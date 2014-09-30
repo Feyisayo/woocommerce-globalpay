@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 
     jQuery(e).bind ('click', {the_order_id: order_id}, function (event) {
         jQuery.blockUI({ message: '<h3>Updating from GlobalPay. Please wait.....</h3>'});
-        event.data.action = 'requery';
+        event.data.action = 'globalpay_requery';
         // event.data.the_order_id is already order_id
         jQuery.post(globalpay_ajax_object.ajax_url, event.data, function(response) {
           r_message = '';
