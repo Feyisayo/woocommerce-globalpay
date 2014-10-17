@@ -843,7 +843,7 @@ function globalpay_add_query_var($vars) {
 }
 
 // Add Naira to the currency list.
-add_filter('woocommerce_currencies', 'globalpay_add_ngn_currency_symbol');
+add_filter('woocommerce_currencies', 'globalpay_add_ngn_currency');
 function globalpay_add_ngn_currency($currencies) {
   $currencies['NGN'] = __('Nigerian Naira', 'woocommerce');
   return $currencies;
