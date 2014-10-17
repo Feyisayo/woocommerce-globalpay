@@ -8,7 +8,7 @@
  * Version:     3.1
  */
 
-ini_set('display_errors', '0');
+//ini_set('display_errors', '0');
 function woocommerce_globalpay_init(){
   // The GlobalPay plugin should only be loaded if Woocommerce is installed.
   if (!class_exists('WC_Payment_Gateway')) {
@@ -902,7 +902,7 @@ function globalpay_add_query_var($vars) {
 }
 
 // Add Naira to the currency list.
-add_filter('woocommerce_currencies', 'globalpay_add_ngn_currency_symbol');
+add_filter('woocommerce_currencies', 'globalpay_add_ngn_currency');
 function globalpay_add_ngn_currency($currencies) {
   $currencies['NGN'] = __('Nigerian Naira', 'woocommerce');
   return $currencies;
