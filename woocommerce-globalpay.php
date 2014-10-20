@@ -8,7 +8,6 @@
  * Version:     3.1
  */
 
-//ini_set('display_errors', '0');
 function woocommerce_globalpay_init(){
   // The GlobalPay plugin should only be loaded if Woocommerce is installed.
   if (!class_exists('WC_Payment_Gateway')) {
@@ -605,7 +604,7 @@ function woocommerce_globalpay_init(){
 
     if ('yes' == $this->debug) {
       $this->log->add('globalpay',
-        'Response dump from GlobalPay' . print_r($xml, TRUE));
+        'Response dump from GlobalPay ' . print_r($xml, TRUE));
     }
   }
 
