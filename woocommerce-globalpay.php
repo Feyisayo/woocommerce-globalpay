@@ -203,7 +203,7 @@ function woocommerce_globalpay_init(){
       $txn_ref = get_current_user_id() . '-' . $order->id . '-' . time();
       update_post_meta($order->id, 'merch_txnref', $txn_ref);
 
-      $order_total = $order->get_order_total();
+      $order_total = $order->get_total();
 
       if ($this->debug == 'yes') {
         $this->log->add( 'globalpay', 'Generating payment form for order #' . $order->id . '.');
@@ -552,7 +552,7 @@ function woocommerce_globalpay_init(){
 
     $this->log->add('globalpay', 'Connecting to GlobalPay at ' . $endpoint);
     $this->log->add('globalpay', 'Parametres to be sent to GlobalPay ' . print_r($params, TRUE));
-
+    
     // Connect.
     $result = $soap_client->call(
       'getTransactions',
