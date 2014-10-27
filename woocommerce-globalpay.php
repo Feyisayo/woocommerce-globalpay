@@ -249,6 +249,16 @@ function woocommerce_globalpay_init(){
     }
 
     function generate_globalpay_form($order_id) {
+      // It appears some themes call the checkout page twice thus causing the
+      // transaction reference to be generated twice. Below we shall prevent
+      // it by ensuring the referrer has no URL arguments.
+      $query_args = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY);
+      if (0 != substr_count($query_args, 'key') || 0 != substr_count($query_args, 'order')) {
+        if ('yes' == $this->debug) {
+          $this->log->add('globalpay', __FUNCTION__ . ' aborted because of possible duplicate call');
+        }
+        return;
+      }
       global $woocommerce;
 
       $order = new WC_Order($order_id);
@@ -442,6 +452,7 @@ function woocommerce_globalpay_init(){
         'redirect' => add_query_arg('order', $order->id, add_query_arg('key', $order->order_key, get_permalink(woocommerce_get_page_id('pay'))))
       );
     }
+
     function receipt_page( $order ) {
       echo '<p>'.__('Thank you for your order, please click the button below to pay with GlobalPay.', 'woocommerce').'</p>';
 
@@ -517,8 +528,8 @@ function woocommerce_globalpay_init(){
 
     if ('yes' == $this->testmode) {
       $endpoint = 'https://demo.globalpay.com.ng/GlobalpayWebService_demo/service.asmx?wsdl';
-      $namespace = 'http://www.eazypaynigeria.com/globalpay_demo/';
-      $soap_action = 'http://www.eazypaynigeria.com/globalpay_demo/getTransactions';
+      $namespace = 'https://www.eazypaynigeria.com/globalpay_demo/';
+      $soap_action = 'https://www.eazypaynigeria.com/globalpay_demo/getTransactions';
     } else {
       $endpoint = 'https://www.globalpay.com.ng/globalpaywebservice/service.asmx?wsdl';
       $namespace = 'https://www.eazypaynigeria.com/globalpay/';
@@ -529,6 +540,7 @@ function woocommerce_globalpay_init(){
       $this->payment_info = false;
       return;
     }
+
     // Set up parameters.
     if ('NGN' == $order->get_order_currency()) {
       $merchant_id = $this->ngn_merchant_id;
@@ -551,8 +563,7 @@ function woocommerce_globalpay_init(){
     );
 
     $this->log->add('globalpay', 'Connecting to GlobalPay at ' . $endpoint);
-    $this->log->add('globalpay', 'Parametres to be sent to GlobalPay ' . print_r($params, TRUE));
-    
+
     // Connect.
     $result = $soap_client->call(
       'getTransactions',
@@ -568,6 +579,7 @@ function woocommerce_globalpay_init(){
       $this->payment_info = false;
       return;
     }
+
     $err = $soap_client->getError();
     if ($err) {
       $this->log->add('globalpay', 'Error looking transaction\n' . print_r($err, true));
@@ -575,9 +587,8 @@ function woocommerce_globalpay_init(){
       return;
     }
 
-    // Interpret XML string result into an object.
-    $xml = simplexml_load_string($result['getTransactionsResult']);
     // Add all $xml's properties to $this->payment_info
+    $xml = simplexml_load_string($result['getTransactionsResult']);
     $xml_arr = $this->make_array($xml);
     array_walk_recursive($xml_arr, array($this, 'fill_out_payment_info'));
 
@@ -594,7 +605,6 @@ function woocommerce_globalpay_init(){
       $this->payment_info['status'] = 'failed';
     }
 
-
     // Work-around for name/names API field issue
     if (isset($this->payment_info['name'])) {
       $this->payment_info['names'] = $this->payment_info['name'];
@@ -603,8 +613,7 @@ function woocommerce_globalpay_init(){
     }
 
     if ('yes' == $this->debug) {
-      $this->log->add('globalpay',
-        'Response dump from GlobalPay ' . print_r($xml, TRUE));
+      $this->log->add('globalpay', 'Response dump from GlobalPay ' . print_r($result, TRUE));
     }
   }
 
@@ -810,12 +819,14 @@ add_filter('woocommerce_admin_order_actions', 'add_globalpay_requery_button',
 function add_globalpay_requery_button ($actions, $the_order) {
   // Do this only for GlobalPay-based payments that are not successful
   $wc_globalpay = new WC_GlobalPay();
-  if ($the_order->payment_method != $wc_globalpay->id
-      || $the_order->status == 'processing'
-      || $the_order->status == 'completed') {
+  //if ($the_order->payment_method != $wc_globalpay->id
+      //|| $the_order->status == 'processing'
+      //|| $the_order->status == 'completed') {
+    //return $actions;
+  //}
+  if ($the_order->payment_method != $wc_globalpay->id) {
     return $actions;
   }
-
   $actions['requery'] = array(
     'url'     => '#',
     'name'     => __('Update order ' . $the_order->id, 'woocommerce-globalpay'),
