@@ -187,16 +187,6 @@ function woocommerce_globalpay_init(){
 
     }
 
-    /**
-     * Sets the merchant credentials to either the NGN or USD depending on the
-     * current order's currenncy
-     */
-    function set_merchant_credentials ($currency_symbol) {
-      if ('NGN' == $currency_symbol) {
-
-      }
-    }
-
     function get_globalpay_args( $order ) {
       global $woocommerce;
 
@@ -218,8 +208,8 @@ function woocommerce_globalpay_init(){
           $name = esc_html(ucfirst($user_info->display_name));
         }
       } else {
-        if ($the_order->billing_first_name || $the_order->billing_last_name) {
-        $name = trim( $the_order->billing_first_name . ' ' . $the_order->billing_last_name );
+        if ($order->billing_first_name || $order->billing_last_name) {
+          $name = trim( $order->billing_first_name . ' ' . $order->billing_last_name );
         } else {
           $name = __( 'Guest', 'woocommerce' );
         }
