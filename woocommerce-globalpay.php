@@ -809,14 +809,12 @@ add_filter('woocommerce_admin_order_actions', 'add_globalpay_requery_button',
 function add_globalpay_requery_button ($actions, $the_order) {
   // Do this only for GlobalPay-based payments that are not successful
   $wc_globalpay = new WC_GlobalPay();
-  //if ($the_order->payment_method != $wc_globalpay->id
-      //|| $the_order->status == 'processing'
-      //|| $the_order->status == 'completed') {
-    //return $actions;
-  //}
-  if ($the_order->payment_method != $wc_globalpay->id) {
+  if ($the_order->payment_method != $wc_globalpay->id
+      || $the_order->status == 'processing'
+      || $the_order->status == 'completed') {
     return $actions;
   }
+
   $actions['requery'] = array(
     'url'     => '#',
     'name'     => __('Update order ' . $the_order->id, 'woocommerce-globalpay'),
