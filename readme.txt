@@ -52,7 +52,8 @@ NOTE: In WooCommerce, when an order is paid it is marked "Processing"
 = 3.2 =
 * Compatible with WordPress 4.0 and WooCommerce 2.2.8
 * Payment notifications now sent to billing contact
-* Bug fixes
+* Fixed [issue #2] (https://github.com/Feyisayo/woocommerce-globalpay/issues/2). Thanks to [noplinks] (https://profiles.wordpress.org/noplinks/)
+* Other bug fixes
 
 = 3.1 =
 * Compatible with WordPress 3.9.1 and WooCommerce 2.1.9
