@@ -3,7 +3,7 @@ Contributors: Feyisayo
 Donate Link: http://profiles.wordpress.org/feyisayo/
 Tags: globalpay, payment gateway, zenith bank, ecommerce, e-commerce, commerce, wordpress ecommerce, woocommerce
 Requires at least: 4.0
-Tested up to: 3.9.1
+Tested up to: 4.0.1
 Stable tag: 3.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -13,7 +13,7 @@ Woocommerce GlobalPay allows payments to be made to a Woocommerce shop via Globa
 == Description ==
 GlobalPay is a web-based payment gateway that enables merchants/sellers to accept card payments from customers worldwide.
 
-With GlobalPay, your website can accept payments via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
+With GlobalPay, your website can accept payments from anywhere in the world via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
 
 This plugin was tested with WooCommerce 2.2.8
 
@@ -50,7 +50,7 @@ NOTE: In WooCommerce, when an order is paid it is marked "Processing"
 
 == Changelog ==
 = 3.2 =
-* Compatible with WordPress 4.0 and WooCommerce 2.2.8
+* Compatible with WordPress 4.0.1 and WooCommerce 2.2.8
 * Payment notifications now sent to billing contact
 * Fixed [issue #2] (https://github.com/Feyisayo/woocommerce-globalpay/issues/2). Thanks to [noplinks] (https://profiles.wordpress.org/noplinks/)
 * Other bug fixes
