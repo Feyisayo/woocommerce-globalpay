@@ -2,16 +2,17 @@
 /**
  * Thankyou page override for Globalpay
  *
- * This override is to remove the text: 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction.'
+ * This override is to remove the text: 'Unfortunately your order cannot be
+ * processed as the originating bank/merchant has declined your transaction.'
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-
-global $woocommerce;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 if ( $order ) : ?>
 
-	<?php if ( in_array( $order->status, array( 'failed' ) ) ) : ?>		
+	<?php if ( $order->has_status( 'failed' ) ) : ?>
 
 		<p><?php
 			if ( is_user_logged_in() )
@@ -23,17 +24,17 @@ if ( $order ) : ?>
 		<p>
 			<a href="<?php echo esc_url( $order->get_checkout_payment_url() ); ?>" class="button pay"><?php _e( 'Pay', 'woocommerce' ) ?></a>
 			<?php if ( is_user_logged_in() ) : ?>
-			<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'myaccount' ) ) ); ?>" class="button pay"><?php _e( 'My Account', 'woocommerce' ); ?></a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="button pay"><?php _e( 'My Account', 'woocommerce' ); ?></a>
 			<?php endif; ?>
 		</p>
 
 	<?php else : ?>
 
-		<p><?php _e( 'Thank you. Your order has been received.', 'woocommerce' ); ?></p>
+		<p><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'woocommerce' ), $order ); ?></p>
 
 		<ul class="order_details">
 			<li class="order">
-				<?php _e( 'Order:', 'woocommerce' ); ?>
+				<?php _e( 'Order Number:', 'woocommerce' ); ?>
 				<strong><?php echo $order->get_order_number(); ?></strong>
 			</li>
 			<li class="date">
@@ -46,7 +47,7 @@ if ( $order ) : ?>
 			</li>
 			<?php if ( $order->payment_method_title ) : ?>
 			<li class="method">
-				<?php _e( 'Payment method:', 'woocommerce' ); ?>
+				<?php _e( 'Payment Method:', 'woocommerce' ); ?>
 				<strong><?php echo $order->payment_method_title; ?></strong>
 			</li>
 			<?php endif; ?>
@@ -60,6 +61,6 @@ if ( $order ) : ?>
 
 <?php else : ?>
 
-	<p><?php _e( 'Thank you. Your order has been received.', 'woocommerce' ); ?></p>
+	<p><?php echo apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', 'woocommerce' ), null ); ?></p>
 
 <?php endif; ?>

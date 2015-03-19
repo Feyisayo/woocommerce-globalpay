@@ -5,7 +5,7 @@
  * Description: Allows payments to be made to a Woocommerce shop via GlobalPay
  * Author:      Feyisayo Akinboboye
  * Author URI:  http://twitter.com/Feyisayo
- * Version:     3.2
+ * Version:     3.3
  */
 
 function woocommerce_globalpay_init () {
@@ -805,7 +805,7 @@ function globalpay_requery_callback () {
   die();
 }
 
-add_action('woocommerce_admin_css', 'globalpay_add_custom_css');
+add_action('admin_enqueue_scripts', 'globalpay_add_custom_css');
 function globalpay_add_custom_css() {
   wp_register_style('globalpay-css', plugins_url('/css/styles.css', __FILE__));
   wp_enqueue_style('globalpay-css');
