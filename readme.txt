@@ -3,7 +3,7 @@ Contributors: Feyisayo
 Donate Link: http://profiles.wordpress.org/feyisayo/
 Tags: globalpay, payment gateway, zenith bank, ecommerce, e-commerce, commerce, wordpress ecommerce, woocommerce
 Requires at least: 4.0
-Tested up to: 4.1.1
+Tested up to: 4.2.2
 Stable tag: 3.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -15,7 +15,7 @@ GlobalPay is a web-based payment gateway that enables merchants/sellers to accep
 
 With GlobalPay, your website can accept payments from anywhere in the world via MasterCard, VISA and bank transfers. Get started at https://www.globalpay.com.ng/
 
-This plugin was tested with WooCommerce 2.3.7
+This plugin was tested with WooCommerce 2.3.9
 
 Follow this code development on [Github](https://github.com/Feyisayo/woocommerce-globalpay)
 == Installation ==
