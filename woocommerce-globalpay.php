@@ -346,25 +346,29 @@ function woocommerce_globalpay_init () {
       if ('completed' == $order->status || 'processing' == $order->status) {
         $this->feedback_message = $this->thanks_message
           . '<br/>Below are the details of your payment transaction:'
-          . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
           . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['name'])
-          . '<br/><strong>Amount paid:</strong> '
-            . number_format(end($order_payment_info['amount']), 2)
+          . '<br/><strong>Amount to be paid:</strong> ' . number_format($order->get_total(), 2)
+          . '<br/><strong>Amount actually paid:</strong> ' . number_format(end($order_payment_info['amount']), 2)
           . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
-          . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
-          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
-          . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
+          . '<br/><strong>Payment channel:</strong> ' . end($order_payment_info['channel'])
+          . '<br/><strong>Payment status:</strong> ' . end($order_payment_info['payment_status'])
+          . '<br/><strong>Payment status description:</strong> ' . end($order_payment_info['payment_status_description'])          
+          . '<br/><strong>Merchant transaction reference Number:</strong> ' . end($order_payment_info['merch_txnref'])
+          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref']);
+
       } else if ('failed' == $order->status) {
         $this->feedback_message = $this->error_message
           . '<br/>Below are the details of your payment transaction:'
-          . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
           . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['name'])
-          . '<br/><strong>Amount paid:</strong> '
-            . number_format(end($order_payment_info['amount']), 2)
+          . '<br/><strong>Amount to be paid:</strong> ' . number_format($order->get_total(), 2)
+          . '<br/><strong>Amount actually paid:</strong> ' . number_format(end($order_payment_info['amount']), 2)
           . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
-          . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
-          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
-          . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
+          . '<br/><strong>Payment channel:</strong> ' . end($order_payment_info['channel'])
+          . '<br/><strong>Payment status:</strong> ' . end($order_payment_info['payment_status'])
+          . '<br/><strong>Payment status description:</strong> ' . end($order_payment_info['payment_status_description'])          
+          . '<br/><strong>Merchant transaction reference Number:</strong> ' . end($order_payment_info['merch_txnref'])
+          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref']);
+          
       } else if ('on-hold' == $order->status && TRUE == $order_payment_info['amount_discrepancy']) {
         $this->feedback_message = 'Your payment was successful. '
           . 'However there was a discrepancy in the amount paid.'
@@ -372,14 +376,15 @@ function woocommerce_globalpay_init () {
           . '<br/>while the actual amount paid is <strong>NGN' . number_format(end($order_payment_info['amount']), 2) . '</strong>'
           . '<br/> A sales person has already been notified of this.<br/>'
           . '<br/>Below are the details of your payment transaction:'
-          . '<br/><strong>Transaction reference:</strong> ' . end($order_payment_info['merch_txnref'])
           . '<br/><strong>Customer name:</strong> ' . end($order_payment_info['name'])
-          . '<br/><strong>Amount paid:</strong> '
-            . number_format(end($order_payment_info['amount']), 2)
+          . '<br/><strong>Amount to be paid:</strong> ' . number_format($order->get_total(), 2)
+          . '<br/><strong>Amount actually paid:</strong> ' . number_format(end($order_payment_info['amount']), 2)
           . '<br/><strong>Currency:</strong> ' . end($order_payment_info['currency'])
-          . '<br/><strong>Payment Channel:</strong> ' . end($order_payment_info['channel'])
-          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref'])
-          . '<br/><strong>Transaction status description:</strong> ' . end($order_payment_info['payment_status_description']);
+          . '<br/><strong>Payment channel:</strong> ' . end($order_payment_info['channel'])
+          . '<br/><strong>Payment status:</strong> ' . end($order_payment_info['payment_status'])
+          . '<br/><strong>Payment status description:</strong> ' . end($order_payment_info['payment_status_description'])          
+          . '<br/><strong>Merchant transaction reference Number:</strong> ' . end($order_payment_info['merch_txnref'])
+          . '<br/><strong>GlobalPay reference:</strong> ' . end($order_payment_info['txnref']);
       }
 
       echo wpautop($this->feedback_message);
@@ -672,11 +677,18 @@ HTML;
       if (!$order->billing_email) {
         return;
       }
-      $currency_symbol = $order->get_order_currency();
-      $site_name = get_bloginfo('name');
-      $name_of_user = $order->billing_first_name . ' ' . $order->billing_last_name;
-      $amount = number_format($amount, 2);
+      $order_payment_info = get_post_meta($order_id);
+      $name_of_user = end($order_payment_info['name']);
+      $amount_due = number_format($order->get_total(), 2);
+      $amount_paid = number_format(end($order_payment_info['amount']), 2);
+      $currency = end($order_payment_info['currency']);
+      $channel = end($order_payment_info['channel']);
+      $payment_status = end($order_payment_info['payment_status']);
+      $payment_status_desc = end($order_payment_info['payment_status_description']);
+      $merch_txn_ref = end($order_payment_info['merch_txnref']);
+      $global_ref = end($order_payment_info['txnref']);
 
+      $site_name = get_bloginfo('name');
       $to = $order->billing_email;
       $subject = "Successful payment for order #$order_id";
       $message = <<<HTML
@@ -690,9 +702,19 @@ HTML;
       <p>
         Dear $name_of_user,</p>
       <p>
-        This is to inform you that your payment of <strong>$currency_symbol$amount</strong> for order <strong>$order_id</strong> via GlobalPay was successful.</p>
+        This is to inform you that your payment for order <strong>$order_id</strong> via GlobalPay was successful.</p>
       <p>
-        Your GlobalPay payment reference is <strong>$globalpay_ref</strong></p>
+        Below are the details of your payment transaction:<br/>
+        <strong>Customer name:</strong> $name_of_user<br/>
+        <strong>Amount to be paid:</strong> $amount_due<br/>
+        <strong>Amount actually paid:</strong> $amount_paid<br/>
+        <strong>Currency:</strong> $currency<br/>
+        <strong>Payment channel:</strong> $channel<br/>
+        <strong>Payment status:</strong> $payment_status<br/>
+        <strong>Payment status description:</strong> $payment_status_desc<br/>
+        <strong>Merchant transaction reference Number:</strong> $merch_txn_ref<br/>
+        <strong>GlobalPay reference:</strong> $global_ref<br/>
+      </p>
       <p>
         Thanks for purchasing at $site_name</p>
     </body>
